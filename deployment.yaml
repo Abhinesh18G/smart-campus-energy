@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: dashboard
-          image: docker.io/YOUR_DOCKERHUB_USERNAME/smart-campus-energy:latest
+          image: docker.io/abhinesh18g/smart-campus-energy:latest
           ports:
             - containerPort: 80
           readinessProbe:
