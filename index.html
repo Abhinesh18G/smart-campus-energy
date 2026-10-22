@@ -4,106 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Campus Energy Monitor</title>
+    <title>Campus Energy Dashboard</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background: #f1f5f9;
-            color: #1e293b;
-        }
-        header {
-            background: #12304a;
-            color: white;
-            padding: 24px;
-            text-align: center;
-        }
-        main {
-            max-width: 1000px;
-            margin: 24px auto;
-            padding: 0 16px;
-        }
-        .summary, .buildings {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
-        }
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px #00000010;
-        }
-        .number {
-            font-size: 28px;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-        .warning {
-            background: #fee2e2;
-            color: #991b1b;
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 12px;
-        }
-        .safe {
-            background: #dcfce7;
-            color: #166534;
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 12px;
-        }
-        .bar {
-            height: 10px;
-            background: #e2e8f0;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        .fill {
-            height: 100%;
-            background: #0d9488;
-        }
-        h2 {
-            margin-top: 30px;
-        }
-        footer {
-            text-align: center;
-            padding: 24px;
-            color: #64748b;
-        }
+        body { font-family: Arial, sans-serif; background: #f1f5f9; margin: 0; color: #1e293b; }
+        header { background: #12304a; color: white; padding: 20px; text-align: center; }
+        main { max-width: 1000px; margin: 24px auto; padding: 0 16px; }
+        .buildings { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+        .card { background: white; padding: 20px; border-radius: 12px; }
+        .number { font-size: 28px; font-weight: bold; }
+        .warning { background: #fee2e2; color: #991b1b; padding: 12px; border-radius: 8px; }
+        .safe { background: #dcfce7; color: #166534; padding: 12px; border-radius: 8px; }
     </style>
 </head>
 <body>
 <header>
     <h1>Smart Campus Energy Monitoring</h1>
-    <p>University Facilities Management Dashboard</p>
+    <p>Daily electricity consumption and energy-saving targets</p>
 </header>
-
 <main>
-    <section class="summary">
-        <div class="card">
-            <h3>Campus Consumption</h3>
-            <div class="number" id="total">270 kWh</div>
-            <p>Daily electricity usage</p>
-        </div>
-        <div class="card">
-            <h3>Energy-Saving Target</h3>
-            <div class="number" id="target">250 kWh</div>
-            <p>Combined daily target</p>
-        </div>
-        <div class="card">
-            <h3>Highest Usage</h3>
-            <div class="number" id="highest">Academic Block</div>
-            <p id="highestUsage">120 kWh per day</p>
-        </div>
-    </section>
-
     <h2>Building-wise Consumption</h2>
     <section class="buildings" id="buildings"></section>
 </main>
-
-<footer>Smart Campus Energy System | Sample data</footer>
-
 <script>
 const buildings = [
     { name: "Academic Block", usage: 120, target: 90 },
@@ -111,29 +32,17 @@ const buildings = [
     { name: "Hostel", usage: 75, target: 80 }
 ];
 
-const total = buildings.reduce((sum, building) => sum + building.usage, 0);
-const target = buildings.reduce((sum, building) => sum + building.target, 0);
-const highest = buildings.reduce((a, b) => a.usage > b.usage ? a : b);
-
-document.getElementById("total").textContent = total + " kWh";
-document.getElementById("target").textContent = target + " kWh";
-document.getElementById("highest").textContent = highest.name;
-document.getElementById("highestUsage").textContent = highest.usage + " kWh per day";
-
 document.getElementById("buildings").innerHTML = buildings.map(building => {
     const excess = building.usage - 100;
     const status = excess > 0
-        ? `<div class="warning">Warning: Daily consumption exceeds 100 kWh by ${excess} kWh.</div>`
-        : `<div class="safe">Within the 100 kWh daily limit.</div>`;
+        ? `<p class="warning">Warning: Consumption exceeds 100 kWh by ${excess} kWh.</p>`
+        : `<p class="safe">Within the 100 kWh daily limit.</p>`;
 
     return `
         <article class="card">
             <h3>${building.name}</h3>
-            <div class="number">${building.usage} kWh</div>
-            <p>Daily saving target: ${building.target} kWh</p>
-            <div class="bar">
-                <div class="fill" style="width:${Math.min(building.usage / 150 * 100, 100)}%"></div>
-            </div>
+            <p class="number">${building.usage} kWh</p>
+            <p>Daily energy-saving target: ${building.target} kWh</p>
             ${status}
         </article>
     `;
